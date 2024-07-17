@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
+class SearchEngine {
+  final String name;
+  final String mainURL;
+  final String searchURL;
 
-class SearchProvider extends ChangeNotifier {
-  String radiostatus = "";
-  void changeradiostatus(status) {
-    radiostatus = status;
-    notifyListeners();
-  }
+  SearchEngine(
+      {required this.name, required this.mainURL, required this.searchURL});
 }

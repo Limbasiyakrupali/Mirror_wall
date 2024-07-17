@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mirror_wall/provider/bookmark_provider.dart';
-import 'package:mirror_wall/provider/delete_provider.dart';
 import 'package:mirror_wall/provider/radio_provider.dart';
-import 'package:mirror_wall/provider/search_provider.dart';
 import 'package:mirror_wall/views/bookmark.dart';
 import 'package:mirror_wall/views/homepage.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +11,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(
           create: (BuildContext context) {
-            return SearchProvider();
+            return RadioProvider();
           },
         ),
         ChangeNotifierProvider(
@@ -23,7 +21,7 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (BuildContext context) {
-            return DeleteProvider();
+            // return DeleteProvider();
           },
         ),
         ChangeNotifierProvider(
@@ -45,7 +43,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
-        '/': (contex) => const homepage(),
+        '/': (contex) => const Homepage(),
         'bookmark': (contex) => const bookmark(),
       },
     );

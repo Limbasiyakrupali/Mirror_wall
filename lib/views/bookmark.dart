@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mirror_wall/provider/bookmark_provider.dart';
-import 'package:mirror_wall/provider/delete_provider.dart';
 import 'package:provider/provider.dart';
 
 class bookmark extends StatefulWidget {
@@ -16,42 +15,8 @@ class _bookmarkState extends State<bookmark> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Bookmark"),
-        actions: [
-          IconButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('Delete'),
-                    content: const Text(
-                        'Are you sure you want to delete all Bookmarks?'),
-                    actions: <Widget>[
-                      TextButton(
-                        child: const Text('Cancel'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      TextButton(
-                        child: const Text('Confirm'),
-                        onPressed: () {
-                          Provider.of<DeleteProvider>(context, listen: false)
-                              .deleteAll();
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-            icon: Icon(Icons.delete),
-            color: Colors.black.withOpacity(0.5),
-          )
-        ],
       ),
-      body: BookmarkProvider.bookmarkurl.length == 0
+      body: Provider.of<BookmarkProvider>(context).bookmarkurl.isEmpty
           ? Container(
               alignment: Alignment.center,
               child: Column(
@@ -72,11 +37,11 @@ class _bookmarkState extends State<bookmark> {
                 ],
               ),
             )
-          : Consumer<DeleteProvider>(
-              builder:
-                  (BuildContext context, DeleteProvider value, Widget? child) {
+          : Consumer<BookmarkProvider>(
+              builder: (BuildContext context, bookmark, Widget? child) {
                 return ListView.builder(
-                  itemCount: BookmarkProvider.bookmarkurl.length,
+                  itemCount:
+                      Provider.of<BookmarkProvider>(context).bookmarkurl.length,
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {},
@@ -84,29 +49,19 @@ class _bookmarkState extends State<bookmark> {
                         child: Container(
                           decoration: BoxDecoration(border: Border.all()),
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Container(
-                                padding: EdgeInsets.only(left: 10),
-                                child: Text(
-                                  "${'url'}",
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
                               SizedBox(
                                 width: 280,
                                 child: Text(
-                                  "${BookmarkProvider.bookmarkurl[index].toString()}",
+                                  "${Provider.of<BookmarkProvider>(context).bookmarkurl[index]}",
                                   style: TextStyle(fontSize: 20),
-                                  maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               IconButton(
                                   onPressed: () {
-                                    value.deleteBookMark(index);
+                                    // Provider.of<BookmarkProvider>(context).removeurl();
                                   },
                                   icon: Icon(
                                     Icons.delete,

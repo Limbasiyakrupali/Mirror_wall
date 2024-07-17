@@ -1,31 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:mirror_wall/provider/search_provider.dart';
 
 class RadioProvider extends ChangeNotifier {
   String selectedRadio = '';
-  String strGoogle = "Google";
-  String strYahoo = "Yahoo";
-  String strBing = "Bing";
-  String strDuckDuckGo = "DuckDuckGo";
-  String strMainURL = "https://www.google.com/";
-  String strSearchURL = "https://www.google.com/search?q";
+  List<SearchEngine> searchEngines = [
+    SearchEngine(
+        name: "Google",
+        mainURL: "https://www.google.com/",
+        searchURL: "https://www.google.com/search?q"),
+    SearchEngine(
+        name: "Yahoo",
+        mainURL: "https://in.search.yahoo.com",
+        searchURL: "https://in.search.yahoo.com/search?q"),
+    SearchEngine(
+        name: "Bing",
+        mainURL: "https://www.bing.com",
+        searchURL: "https://www.bing.com/search?q"),
+    SearchEngine(
+        name: "DuckDuckGo",
+        mainURL: "https://duckduckgo.com",
+        searchURL: "https://duckduckgo.com/search?q"),
+  ];
 
-  void handleRadioValueChange(String value, BuildContext context) {
-    selectedRadio = value;
-    if (value == strGoogle) {
-      strMainURL = "https://www.google.com/";
-      strSearchURL = "https://www.google.com/search?q";
-    } else if (value == strYahoo) {
-      strMainURL = "https://in.search.yahoo.com";
-      strSearchURL = "https://in.search.yahoo.com/search?q";
-    } else if (value == strBing) {
-      strMainURL = "https://www.bing.com";
-      strSearchURL = "https://www.bing.com/search?q";
-    } else if (value == strDuckDuckGo) {
-      strMainURL = "https://duckduckgo.com";
-      strSearchURL = "https://duckduckgo.com/search?q";
-    }
-    notifyListeners();
+  late SearchEngine selectedSearchEngine;
 
-    Navigator.of(context).pop();
+  RadioProvider() {
+    selectedSearchEngine = searchEngines[2];
   }
 }
