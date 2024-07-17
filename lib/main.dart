@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mirror_wall/provider/bookmark_provider.dart';
+import 'package:mirror_wall/provider/bookmarkurl.dart';
+import 'package:mirror_wall/provider/delete_provider.dart';
 import 'package:mirror_wall/provider/radio_provider.dart';
 import 'package:mirror_wall/views/bookmark.dart';
 import 'package:mirror_wall/views/homepage.dart';
@@ -21,7 +23,7 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (BuildContext context) {
-            // return DeleteProvider();
+            return DeleteProvider();
           },
         ),
         ChangeNotifierProvider(
@@ -45,6 +47,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (contex) => const Homepage(),
         'bookmark': (contex) => const bookmark(),
+        'bookmarkurl': (contex) => const Bookmarkurl(),
       },
     );
   }

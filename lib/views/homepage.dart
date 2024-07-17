@@ -21,26 +21,6 @@ class _HomepageState extends State<Homepage> {
     String selectedSearchEngine =
         Provider.of<RadioProvider>(context, listen: false).selectedRadio;
 
-    switch (selectedSearchEngine) {
-      case 'Google':
-        searchUrl = 'https://www.google.com/search?q=$query';
-        break;
-      case 'Yahoo':
-        searchUrl = 'https://search.yahoo.com/search?p=$query';
-        break;
-      case 'Bing':
-        searchUrl = 'https://www.bing.com/search?q=$query';
-        break;
-      case 'DuckDuckGo':
-        searchUrl = 'https://www.duckduckgo.com/?q=$query';
-        break;
-      default:
-        searchUrl = 'https://www.google.com/search?q=$query';
-        'https://search.yahoo.com/search?p=$query';
-        'https://www.bing.com/search?q=$query';
-        'https://www.duckduckgo.com/?q=$query';
-    }
-
     inAppWebViewController?.loadUrl(
         urlRequest: URLRequest(url: WebUri(searchUrl)));
   }
