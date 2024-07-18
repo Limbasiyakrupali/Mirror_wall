@@ -28,58 +28,52 @@ class _bookmarkState extends State<bookmark> {
                     size: 50,
                     color: Colors.grey,
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  SizedBox(height: 10),
                   Text(
                     "No Bookmark",
                     style: TextStyle(fontSize: 20, color: Colors.grey),
-                  )
+                  ),
                 ],
               ),
             )
           : Consumer<BookmarkProvider>(
               builder: (BuildContext context, bookmark, Widget? child) {
                 return ListView.builder(
-                  itemCount:
-                      Provider.of<BookmarkProvider>(context).bookmarkurl.length,
-                  itemBuilder: (context, index) {
+                  itemCount: bookmark.bookmarkurl.length,
+                  itemBuilder: (context, val) {
                     return GestureDetector(
                       onTap: () {
                         Navigator.of(context).pushNamed("bookmarkurl",
-                            arguments: bookmark.bookmarkurl[index]);
+                            arguments: bookmark.bookmarkurl[val]);
                       },
-                      child: Consumer<DeleteProvider>(
-                        builder: (BuildContext, deleteprovider, _) {
-                          return Card(
-                            child: Container(
-                              decoration: BoxDecoration(border: Border.all()),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  SizedBox(
-                                    width: 280,
-                                    child: Text(
-                                      "${Provider.of<BookmarkProvider>(context).bookmarkurl[index]}",
-                                      style: TextStyle(fontSize: 20),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  IconButton(
-                                      onPressed: () {
-                                        Provider.of<DeleteProvider>(context)
-                                            .deleteAll(context);
-                                      },
-                                      icon: Icon(
-                                        Icons.delete,
-                                        color: Colors.grey.shade700,
-                                      ))
-                                ],
+                      child: Card(
+                        child: Container(
+                          decoration: BoxDecoration(border: Border.all()),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: 280,
+                                child: Text(
+                                  "${bookmark.bookmarkurl[val]}",
+                                  style: TextStyle(fontSize: 20),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
-                            ),
-                          );
-                        },
+                              IconButton(
+                                onPressed: () {
+                                  Provider.of<DeleteProvider>(context,
+                                          listen: false)
+                                      .deleteBookMark(val, context);
+                                },
+                                icon: Icon(
+                                  Icons.delete,
+                                  color: Colors.grey.shade700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     );
                   },

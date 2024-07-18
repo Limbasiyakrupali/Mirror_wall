@@ -179,7 +179,7 @@ class _HomepageState extends State<Homepage> {
                                   Expanded(
                                     child: TextField(
                                       controller: searchController,
-                                      decoration: InputDecoration(
+                                      decoration: const InputDecoration(
                                         border: InputBorder.none,
                                         hintText: 'Search...',
                                       ),
