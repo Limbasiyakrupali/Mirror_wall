@@ -62,9 +62,11 @@ class _bookmarkState extends State<bookmark> {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  Provider.of<DeleteProvider>(context,
-                                          listen: false)
-                                      .deleteBookMark(val, context);
+                                  setState(() {
+                                    Provider.of<DeleteProvider>(context,
+                                            listen: false)
+                                        .deleteBookMark(val, context);
+                                  });
                                 },
                                 icon: Icon(
                                   Icons.delete,

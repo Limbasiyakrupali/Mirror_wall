@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mirror_wall/provider/bookmark_provider.dart';
-import 'package:mirror_wall/provider/radio_provider.dart';
+import 'package:mirror_wall/utils/alldata.dart';
 import 'package:provider/provider.dart';
 
 class Homepage extends StatefulWidget {
@@ -15,12 +15,10 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   InAppWebViewController? inAppWebViewController;
   TextEditingController searchController = TextEditingController();
+  String browser = "https://google.com/";
 
   void performSearch(String query) {
-    String searchUrl = '';
-    String selectedSearchEngine =
-        Provider.of<RadioProvider>(context, listen: false).selectedRadio;
-
+    String searchUrl = 'https://www.google.com/search?q=$query';
     inAppWebViewController?.loadUrl(
         urlRequest: URLRequest(url: WebUri(searchUrl)));
   }
@@ -30,54 +28,36 @@ class _HomepageState extends State<Homepage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Select Search Engine'),
-          content: Consumer<RadioProvider>(
-            builder: (context, provider, _) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
+          title: const Text('Select Search Engine'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: alldata.map((e) {
+              return Row(
                 children: [
-                  RadioListTile<String>(
-                    title: Text('Google'),
-                    value: 'Google',
-                    groupValue: provider.selectedRadio,
-                    onChanged: (value) {
-                      Navigator.of(context).pop(); // Close dialog
+                  Radio<String>(
+                    value: e["url"]!,
+                    groupValue: browser,
+                    onChanged: (val) {
+                      setState(() {
+                        browser = val!;
+                        inAppWebViewController?.loadUrl(
+                          urlRequest: URLRequest(url: WebUri(val)),
+                        );
+                        Navigator.pop(context);
+                      });
                     },
                   ),
-                  RadioListTile<String>(
-                    title: Text('Yahoo'),
-                    value: 'Yahoo',
-                    groupValue: provider.selectedRadio,
-                    onChanged: (value) {
-                      Navigator.of(context).pop(); // Close dialog
-                    },
-                  ),
-                  RadioListTile<String>(
-                    title: Text('Bing'),
-                    value: 'Bing',
-                    groupValue: provider.selectedRadio,
-                    onChanged: (value) {
-                      Navigator.of(context).pop(); // Close dialog
-                    },
-                  ),
-                  RadioListTile<String>(
-                    title: Text('DuckDuckGo'),
-                    value: 'DuckDuckGo',
-                    groupValue: provider.selectedRadio,
-                    onChanged: (value) {
-                      Navigator.of(context).pop(); // Close dialog
-                    },
-                  ),
+                  Text(e["values"]!),
                 ],
               );
-            },
+            }).toList(),
           ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Close'),
+              child: const Text('Close'),
             ),
           ],
         );
@@ -103,6 +83,7 @@ class _HomepageState extends State<Homepage> {
                     GestureDetector(
                       onTap: () async {
                         Navigator.of(context).pushNamed("bookmark");
+                        // Navigator.of(context).pop();
                       },
                       child: Row(
                         children: [
@@ -205,38 +186,43 @@ class _HomepageState extends State<Homepage> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       IconButton(
-                          onPressed: () {
-                            inAppWebViewController?.loadUrl(
-                                urlRequest: URLRequest(
-                                    url: WebUri("https://google.com/")));
-                          },
-                          icon: (const Icon(Icons.home))),
+                        onPressed: () {
+                          inAppWebViewController?.loadUrl(
+                            urlRequest: URLRequest(url: WebUri(browser)),
+                          );
+                        },
+                        icon: const Icon(Icons.home),
+                      ),
                       IconButton(
-                          onPressed: () {
-                            inAppWebViewController?.goBack();
-                          },
-                          icon: (const Icon(Icons.arrow_back))),
+                        onPressed: () {
+                          inAppWebViewController?.goBack();
+                        },
+                        icon: const Icon(Icons.arrow_back),
+                      ),
                       IconButton(
-                          onPressed: () {
-                            inAppWebViewController?.reload();
-                          },
-                          icon: (const Icon(Icons.refresh))),
+                        onPressed: () {
+                          inAppWebViewController?.reload();
+                        },
+                        icon: const Icon(Icons.refresh),
+                      ),
                       IconButton(
                         onPressed: () async {
-                          WebUri? weburi =
+                          WebUri? webUri =
                               await inAppWebViewController?.getOriginalUrl();
-                          Provider.of<BookmarkProvider>(context, listen: false)
-                              .addurl(
-                            WebUri("$weburi"),
-                          );
+                          if (webUri != null) {
+                            Provider.of<BookmarkProvider>(context,
+                                    listen: false)
+                                .addurl(webUri);
+                          }
                         },
                         icon: const Icon(Icons.bookmark_add_outlined),
                       ),
                       IconButton(
-                          onPressed: () {
-                            inAppWebViewController?.goForward();
-                          },
-                          icon: (const Icon(Icons.arrow_forward))),
+                        onPressed: () {
+                          inAppWebViewController?.goForward();
+                        },
+                        icon: const Icon(Icons.arrow_forward),
+                      ),
                     ],
                   ),
                 ],
